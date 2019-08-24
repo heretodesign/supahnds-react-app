@@ -1,0 +1,66 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap');
+
+
+@mixin desktop {
+  @media (min-width: 1024px) { @content; }
+}
+
+@mixin phone {
+  @media (max-width: 768px) { @content; }
+}
+
+#notification {
+  background-color: #282c34;
+}
+
+#colMain {
+  margin-bottom: 100px;
+  margin-top: 30px;
+  border: 2px solid white;
+
+  @include phone {
+    margin-bottom: 40px;
+  }
+}
+
+#title {
+  color: white;
+  font-size: 2.6rem;
+  margin-top: 40px;
+  font-weight: bold;
+  font-family: 'Playfair Display', serif;
+
+  @include phone {
+    font-size: 1.6rem;
+    margin-top: 10px;
+  }
+}
+
+#synopsis {
+  color: white;
+  font-size: 1.2rem;
+  font-weight: 400;
+  font-family: 'Roboto', sans-serif;
+
+  @include phone {
+      margin-top: 10px;
+      font-weight: 300;
+      font-size: 0.8rem;
+  }
+}
+
+#detDescription {
+  @include desktop {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 400;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  @include phone {
+    color: white;
+    font-size: 0.8rem;
+    font-family: 'Roboto', sans-serif;
+  }
+}

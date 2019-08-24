@@ -1,26 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Suspense, lazy } from 'react';
+import './App.scss';
+import { Route, Link } from "react-router-dom"
+import Header from './components/layout/Header/Header'
+import Footer from './components/layout/Footer/Footer'
+import NoticeNav from './components/content/NoticeNav'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const ListPage = lazy(() => import('./pages/ListPage'));
+const ViewPage = lazy(() => import('./pages/ViewPage'));
+
+class App extends React.Component {
+
+  render() {
+    return (
+      <div className="App">
+        <Header />
+        <NoticeNav />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Route exact path="/" component={ListPage} />
+          <Route path="/pages/viewpage/:id" component={ViewPage} />
+        </Suspense>
+        <Footer />
+      </div>
+    );
+  }
 }
 
 export default App;

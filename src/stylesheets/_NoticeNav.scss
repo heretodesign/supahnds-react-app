@@ -1,0 +1,45 @@
+@mixin phone {
+  @media (max-width: 768px) { @content; }
+}
+
+@mixin tablet {
+  @media (min-width: 769px) { @content; }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) { @content; }
+}
+
+@mixin widescreen {
+  @media (min-width: 1216px) { @content; }
+}
+
+@mixin fullhd {
+  @media (min-width: 1408px) { @content; }
+}
+
+#noticeList {
+
+
+  @include phone {
+    font-size: 1rem;
+    margin-top: 2px;
+  }
+}
+
+
+#companyName {
+  @include phone {
+    font-size: 1rem;
+    margin-top: 1px;
+  }
+}
+
+#landBtn {
+  font-size: 1rem;
+
+  @include phone {
+    font-size: 1rem;
+    margin-top: 1px;
+  }
+}

@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Open+Sans|Roboto&display=swap');
+
+
+@mixin phone {
+  @media (max-width: 768px) { @content; }
+}
+
+@mixin tablet {
+  @media (min-width: 769px) { @content; }
+}
+
+@mixin desktop {
+  @media (min-width: 1024px) { @content; }
+}
+
+@mixin widescreen {
+  @media (min-width: 1216px) { @content; }
+}
+
+@mixin fullhd {
+  @media (min-width: 1408px) { @content; }
+}
+
+.imgLanding {
+  background-image: url('../img/tomas-williams-p-_RJY6hN3E-unsplash.jpg');
+  background-position: left center;
+  background-repeat:  no-repeat;
+  background-size:  cover;
+}
+
+#landingForm {
+  margin-top: 100px;
+  margin-bottom: 150px;
+
+  @include phone {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+}
+#mainBlack {
+  margin-top: 50px;
+  font-size: 1.6rem;
+  line-height: 1.5rem;
+  letter-spacing: -1px;
+  font-weight: 600;
+  color: white;
+  font-family: 'Open Sans', sans-serif;
+
+  @include tablet {
+    font-size: 1.3rem;
+    margin-top: 20px;
+  }
+
+  @include phone {
+    font-size: 1.2rem;
+    margin-top: 20px;
+  }
+}
+
+#landBtn {
+
+  @include tablet {
+    font-size: 1.2rem;
+    margin-top: 1px;
+  }
+
+
+  @include phone {
+    font-size: 1rem;
+    margin-top: 1px;
+  }
+}
+
+#navBtn {
+  margin: 0px 15px;
+  padding: 0px 20px;
+
+  @include phone {
+    font-size: 1rem;
+  }
+}
