@@ -36,6 +36,21 @@ class ListPage extends React.Component {
       }
     }
 
+    searchFilter = (name) => {
+      const lowercaseName = name.toLowerCase();
+      const filterData = this.state.data.filter(e =>
+        e.name.toLowerCase().indexOf(lowercaseName) >= 0
+      );
+
+      this.setState({ filterData });
+    }
+
+    handleChange = (e) => {
+      this.setState({
+        searchInput: e.target.value
+      })
+    }
+
     componentDidMount() {
       axios.get('http://localhost:4444/api/agents')  //http://localhost:4444/api/agents
         .then(response => {
@@ -92,48 +107,6 @@ class ListPage extends React.Component {
       })
     }
 
-    // searchFilter = async (e) => {
-    //   e.preventDefault();
-    //   try {
-    //     const response = await fetch(`http://localhost:4444/api/agents`);
-    //     const data = await response.json();
-    //     console.log(data);
-    //     this.setState({
-    //       filterData: data
-    //     });
-    //     console.log(this.state.filterData)
-    //   } catch (error) {
-    //     console.log('ERROR: ', error)
-    //   }
-    // }
-
-    searchFilter = (name) => {
-      name.preventDefault();
-      const lowercaseName = name.toLowerCase();
-      const filterData = this.state.data.filter(e =>
-        e.name.toLowerCase().indexOf(lowercaseName) >= 0
-      );
-
-      this.setState({ filterData });
-    }
-
-    // searchFilter = name => {
-    //     const uppercaseName = name.toUpperCase();
-    //     const filterData = this.state.data.filter(e =>
-    //       e.name.toUpperCase().indexOf(uppercaseName) >= 0
-    //     );
-    //
-    //     this.setState({
-    //       filterData
-    //     });
-    //   }
-
-
-    handleChange = (e) => {
-      this.setState({
-        searchInput: e.target.value
-      })
-    }
 
     previousPage = () => {
       const { currPage, page, size, data } = this.state;
@@ -170,7 +143,7 @@ class ListPage extends React.Component {
                     <div className="content">
                       <form id="addName-form" onSubmit={e => this.searchFilter(e)}>
                         <div className="columns" id="mainColumns">
-                          <div className="column is-one-quarter">
+                          <div className="column is-one-quarter" id="mainCol">
                             <div className="field">
                               <div className="control">
                                 <input

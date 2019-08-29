@@ -15,3 +15,19 @@ npm install --save enzyme enzyme-adapter-react-16 react-test-renderer
 npm install sinon
 
 <input type="checkbox" onClick={() => {this.updateName(agent._id)} } />
+
+
+// searchFilter = async (e) => {
+//   e.preventDefault();
+//   try {
+//     const response = await fetch(`http://localhost:4444/api/agents`);
+//     const data = await response.json();
+//     console.log(data);
+//     this.setState({
+//       filterData: data
+//     });
+//     console.log(this.state.filterData)
+//   } catch (error) {
+//     console.log('ERROR: ', error)
+//   }
+// }
