@@ -11,11 +11,33 @@ class ListPage extends React.Component {
         agents: [],
         size: 15,
         page: 1,
-        currPage: null
+        currPage: null,
+        selectedAgents: [],
+        filterData: [],
+        isLoading: true,
+        searchInput: ''
+    }
+
+    handleCheck = e => {
+      // ticking
+      if (e.target.checked) {
+        this.setState({
+          selectedAgents: [
+            ...this.state.selectedAgents,
+            e.target.value
+          ]
+        })
+      } else {
+        // unticking
+        this.setState({
+          selectedAgents: this.state.selectedAgents.filter(id => id != e.target.value)
+        })
+
+      }
     }
 
     componentDidMount() {
-      axios.get('./agent.json')
+      axios.get('http://localhost:4444/api/agents')  //http://localhost:4444/api/agents
         .then(response => {
             console.log(response);
             let data = [...response.data]; //use spread operator to copy the res into a new array
@@ -25,7 +47,8 @@ class ListPage extends React.Component {
             this.setState({
               ...this.state,
               data,
-              currPage
+              currPage,
+              isLoading: false
             })
         })
         .catch(error => {
@@ -33,8 +56,87 @@ class ListPage extends React.Component {
         })
     }
 
+    Pending = (agentId) => {
+      axios.put(`http://localhost:4444/api/agents/${agentId}`)
+      .then(response => {
+        this.setState({
+          agents: this.state.agents.filter(agent => agent._id != agentId)
+        })
+      })
+      .catch(error => {
+        alert('Cannnot Mark as Pending')
+      })
+    }
+
+    Approved = (agentId) => {
+      axios.put(`http://localhost:4444/api/agents/${agentId}`)
+      .then(response => {
+        this.setState({
+          agents: this.state.agents.filter(agent => agent._id != agentId)
+        })
+      })
+      .catch(error => {
+        alert('Cannnot Mark as Pending')
+      })
+    }
+
+    Rejected = (agentId) => {
+      axios.put(`http://localhost:4444/api/agents/${agentId}`)
+      .then(response => {
+        this.setState({
+          agents: this.state.agents.filter(agent => agent._id != agentId)
+        })
+      })
+      .catch(error => {
+        alert('Cannnot Mark as Pending')
+      })
+    }
+
+    // searchFilter = async (e) => {
+    //   e.preventDefault();
+    //   try {
+    //     const response = await fetch(`http://localhost:4444/api/agents`);
+    //     const data = await response.json();
+    //     console.log(data);
+    //     this.setState({
+    //       filterData: data
+    //     });
+    //     console.log(this.state.filterData)
+    //   } catch (error) {
+    //     console.log('ERROR: ', error)
+    //   }
+    // }
+
+    searchFilter = (name) => {
+      name.preventDefault();
+      const lowercaseName = name.toLowerCase();
+      const filterData = this.state.data.filter(e =>
+        e.name.toLowerCase().indexOf(lowercaseName) >= 0
+      );
+
+      this.setState({ filterData });
+    }
+
+    // searchFilter = name => {
+    //     const uppercaseName = name.toUpperCase();
+    //     const filterData = this.state.data.filter(e =>
+    //       e.name.toUpperCase().indexOf(uppercaseName) >= 0
+    //     );
+    //
+    //     this.setState({
+    //       filterData
+    //     });
+    //   }
+
+
+    handleChange = (e) => {
+      this.setState({
+        searchInput: e.target.value
+      })
+    }
+
     previousPage = () => {
-      const { currPage, page, size, data, AgentData } = this.state;
+      const { currPage, page, size, data } = this.state;
       if (page > 1) {
         const newPage = page - 1;
         const newCurrPage = paginate(data, newPage, size);
@@ -57,9 +159,58 @@ class ListPage extends React.Component {
 
 
     render() {
-       const { page, size, currPage } = this.state;
+      console.log(this.state.selectedAgents)
+       const { page, size, currPage, searchInput, filterData, isLoading } = this.state;
         return (
           <div>
+            <section className="section is-paddingless-horizontal">
+              <div className="container grid is-large">
+                  <div className="firstsection">
+                  <h1 className="title" id="viewTitle">Applicant Search</h1>
+                    <div className="content">
+                      <form id="addName-form" onSubmit={e => this.searchFilter(e)}>
+                        <div className="columns" id="mainColumns">
+                          <div className="column is-one-quarter">
+                            <div className="field">
+                              <div className="control">
+                                <input
+                                  onChange={e => this.handleChange(e)}
+                                  className="input is-info is-medium"
+                                  type="text"
+                                  name="searchInput"
+                                  value={this.state.searchInput || ""}
+                                  placeholder="..search" />
+                              </div>
+                            </div>
+                          </div>
+                          <div className="column is-one-fifth">
+                            <div className="field">
+                              <div className="control">
+                                <button
+                                  className="button is-medium is-info is-fullwidth"
+                                  type="submit"
+                                  value="Submit">
+                                  SEARCH
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="columns">
+                           <div className="column is-three-fifths is-offset-one-fifth">
+                             {
+                                filterData.map((applicant, index) =>
+                                  <div className="is-size-5 has-text-left" id="empDiv" key={index}>
+                                    {applicant.name} - {applicant.email} - {applicant.status} - {applicant.country}
+                                  </div>)
+                              }
+                           </div>
+                        </div>
+                      </form>
+                    </div>
+                 </div>
+              </div>
+            </section>
             <section className="section is-paddingless-horizontal">
                 <div className="container grid is-large notification">
                     <div className="firstsection">
@@ -67,6 +218,12 @@ class ListPage extends React.Component {
                         <div className="content">
                           <div className="columns">
                             <div className="column" id="tablelisttask">
+                              <div className="actionBtns">
+                                <button onClick={() => {this.Pending()} } className="button is-primary">Pending</button> {' '}
+                                <button onClick={() => {this.Approved()} } className="button is-info">Approved</button> {' '}
+                                <button onClick={() => {this.Rejected()} } className="button is-danger">Rejected</button>
+                              </div>
+                              <br />
                               <table className="table is-mobile">
                                 <thead>
                                   <tr>
@@ -95,15 +252,10 @@ class ListPage extends React.Component {
                                                 />
                                             </figure>
                                           </td>
-                                          {/*<td className="is-5">
-                                            <Link to={`/pages/viewpage/${shipment.id}`}>
-                                              <button className="button is-info has-background-black-bis">View Detials</button>
-                                            </Link>
-                                          </td>*/}
                                           <td>
-                                            <button onClick={() => {this.updateName(agent._id)} } className="button is-primary">Pending</button> {' '}
-                                            <button onClick={() => {this.updateName(agent._id)} } className="button is-info">Approved</button> {' '}
-                                            <button onClick={() => {this.updateName(agent._id)} } className="button is-danger">Rejected</button>
+                                            <label className="checkbox">
+                                              <input onChange={this.handleCheck} value={agent._id} type="checkbox" />
+                                            </label>
                                           </td>
                                         </tr>
                                       ))
